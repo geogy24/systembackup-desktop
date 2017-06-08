@@ -21,11 +21,11 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
   backup.copyFilesToBackupDirectory(filesReportsDOS, "repodos")
   backup.copyFilesToBackupDirectory(filesDataBase, "#{config.dataBaseFolder}\\datos", "DB")
 
-  if(File.exists?("#{config.pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}.zip"))   # Delete .zip file if exists
+  if(File.exists?("#{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip"))   # Delete .zip file if exists
     backup.deleteCopyFile()
   end
 
-  zipFileGenerator = ZipFileGenerator.new("#{config.pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}", "#{config.pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}.zip")
+  zipFileGenerator = ZipFileGenerator.new("#{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}", "#{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip")
   zipFileGenerator.write()
 
   upload = Upload.new

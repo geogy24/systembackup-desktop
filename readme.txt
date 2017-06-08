@@ -1,0 +1,1 @@
+ocra Index.rb --verbose --add-all-core

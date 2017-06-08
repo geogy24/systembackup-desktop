@@ -15,20 +15,20 @@ class Backup
   end
 
   def createDirectories()
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}") # Create a root directory
+    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}"))
+      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}") # Create a root directory
     end
 
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\reportes"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\reportes") # Create a reports directory
+    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\reportes"))
+      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\reportes") # Create a reports directory
     end
 
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\repodos"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\repodos")
+    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\repodos"))
+      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\repodos")
     end
 
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\DB"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\DB") # Create a database directory
+    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\DB"))
+      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\DB") # Create a database directory
     end
   end
 
@@ -40,7 +40,7 @@ class Backup
     files.each do |file|  # verify each element of array
       for extension in EXTENSIONS # verify if the file extension is in array
         if (file.downcase.include?(extension))
-          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}\\#{destinyFolder}")
+          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\#{destinyFolder}")
           break # found extension
         end
       end
@@ -48,10 +48,10 @@ class Backup
   end
 
   def deleteCopyDirectory()
-    FileUtils.rm_rf("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}")
+    FileUtils.rm_rf("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}")
   end
 
   def deleteCopyFile()
-    File.delete("#{@pathCopy}\\#{DateTime.now.strftime("%d_%m_%Y")}.zip")
+    File.delete("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip")
   end
 end

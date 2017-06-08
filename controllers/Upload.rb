@@ -5,7 +5,7 @@ require 'net/sftp'
 class Upload
   def uploadCopy(copyDirectory, uploadDirectory)
     Net::SFTP.start('69.164.198.250', 'root', :password => '20d3s3pt13mbr3') do |sftp|
-      sftp.upload!("#{copyDirectory}\\#{DateTime.now.strftime("%d_%m_%Y")}.zip", "#{uploadDirectory}/#{DateTime.now.strftime("%d_%m_%Y")}.zip") do |event, uploader, *args|
+      sftp.upload!("#{copyDirectory}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip", "#{uploadDirectory}/#{DateTime.now.strftime("%Y_%m_%d")}.zip") do |event, uploader, *args|
         case event
         when :open then
           # args[0] : file metadata
