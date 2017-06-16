@@ -37,13 +37,19 @@ class Backup
       destinyFolder = folder
     end
 
+    quantityFiles = files.size
+    actualFile = 0
+
     files.each do |file|  # verify each element of array
       for extension in EXTENSIONS # verify if the file extension is in array
         if (file.downcase.include?(extension))
           FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\#{destinyFolder}")
+          puts "Copiando #{file} #{actualFile}/#{quantityFiles}"
           break # found extension
         end
       end
+
+      actualFile += 1
     end
   end
 
