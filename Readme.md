@@ -1,10 +1,10 @@
-= Requerimientos
+# Requerimientos
 - ruby 2.3
 
-== Gemas
+## Gemas
 - ocra
 - rubyzip
 - net-sftp
 
-= Compilación
+# Compilación
 ocra Index.rb --verbose --add-all-core
