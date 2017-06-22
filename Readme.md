@@ -5,6 +5,7 @@
 - ocra
 - rubyzip
 - net-sftp
+- rest-client
 
 # Compilación
 ocra Index.rb --verbose --add-all-core
