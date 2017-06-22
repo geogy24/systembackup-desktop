@@ -1,5 +1,6 @@
 require 'rest-client'
 require 'json'
+require_relative '../config/Config'
 
 class Log
 
@@ -16,7 +17,7 @@ class Log
 	################################################
 	def sendLog (title, description, typeLog = 'information', counter = 0)
 		if (counter < 3)
-			response = RestClient.get 'https://backup-joredudiaz.c9users.io/api/log/create', {params: {'businessName' => @businessName, 'typeLog' => typeLog, 'title' => title, 'description' => description}}
+			response = RestClient.get 'https://#{Config::HOST}/api/log/create', {params: {'businessName' => @businessName, 'typeLog' => typeLog, 'title' => title, 'description' => description}}
 
 			if (response.code == 200)
 				json = JSON.parse(response.body)
@@ -25,7 +26,7 @@ class Log
 					counter+=1
 					sendLog(title, description, typeLog, counter)
 				else
-					print "#{title} - #{description}"
+					print "#{title} - #{description} \n\n"
 				end
 			else
 				counter+=1

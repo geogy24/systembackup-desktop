@@ -1,10 +1,10 @@
 require 'date'
-
 require 'net/sftp'
+require_relative '../config/Config'
 
 class Upload
   def uploadCopy(copyDirectory, uploadDirectory)
-    Net::SFTP.start('69.164.198.250', 'root', :password => '20d3s3pt13mbr3') do |sftp|
+    Net::SFTP.start(Config::HOST, Config::USER, :password => Config::PASSWORD) do |sftp|
       sftp.upload!("#{copyDirectory}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip", "#{uploadDirectory}/#{DateTime.now.strftime("%Y_%m_%d")}.zip") do |event, uploader, *args|
         case event
         when :open then
