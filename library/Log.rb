@@ -17,7 +17,7 @@ class Log
 	################################################
 	def sendLog (title, description, typeLog = 'information', counter = 0)
 		if (counter < 3)
-			response = RestClient.get 'https://#{Config::HOST}/api/log/create', {params: {'businessName' => @businessName, 'typeLog' => typeLog, 'title' => title, 'description' => description}}
+			response = RestClient.get "http://#{Config::HOST}/api/log/create", {params: {'businessName' => @businessName, 'typeLog' => typeLog, 'title' => title, 'description' => description}}
 
 			if (response.code == 200)
 				json = JSON.parse(response.body)
