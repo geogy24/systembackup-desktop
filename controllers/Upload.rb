@@ -4,8 +4,8 @@ require_relative '../config/Config'
 
 class Upload
   def uploadCopy(copyDirectory, uploadDirectory)
-    Net::SFTP.start(Config::HOST, Config::USER, :password => Config::PASSWORD) do |sftp|
-      sftp.upload!("#{copyDirectory}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip", "#{uploadDirectory}/#{DateTime.now.strftime("%Y_%m_%d")}.zip") do |event, uploader, *args|
+    Net::SFTP.start(Config::HOST, Config::USER, {:password => Config::PASSWORD, :timeout => 2000}) do |sftp|
+      sftp.upload!("#{copyDirectory}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar", "#{uploadDirectory}/#{DateTime.now.strftime("%Y_%m_%d")}.rar",{:request => 16}) do |event, uploader, *args|
         case event
         when :open then
           # args[0] : file metadata

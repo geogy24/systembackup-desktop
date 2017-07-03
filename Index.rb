@@ -3,7 +3,6 @@ require 'date'
 require_relative 'controllers/Configuration'
 require_relative 'controllers/Backup'
 require_relative 'controllers/Upload'
-require_relative 'library/ZipFileGenerator'
 require_relative 'library/Log'
 
 config = Configuration.new
@@ -33,16 +32,14 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
   end
 
   log.sendLog('Comprimir archivos', 'Se comprimen los elementos')
-  zipFileGenerator = ZipFileGenerator.new("#{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}", "#{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip")
-  zipFileGenerator.write()
+  puts %x(rar a -r #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")})
 
   log.sendLog('Cargar archivo de copia', 'Se carga el archivo de copia generado')
   upload = Upload.new
   upload.uploadCopy(config.pathCopy, config.uploadPath)
 
-  log.sendLog('Eliminar copias locales', 'Se eliminan los archivos comprimidos y los directorios locales')
+  log.sendLog('Eliminar copias locales', 'Se eliminan los directorios locales de copia')
   backup.deleteCopyDirectory()
-  backup.deleteCopyFile()
 else
   log.sendLog('Configuracion erronea', 'No existen los directorios configurados')
   puts "Error: directorios configurados no existen"
