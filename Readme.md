@@ -17,8 +17,10 @@
 ocra Index.rb --verbose --add-all-core
 
 # Compilación python
-En usuario administrador
+Como usuario administrador
+
 pyinstaller -F reminder.py
+pyinstaller -F --windowed config.py
 
 ## Instalación
 Debe agregarse en una variable de entorno de WINDOWS el PATH donde se encuentre el archivo rar.exe quien es el encargado de comprimir los archivos.
