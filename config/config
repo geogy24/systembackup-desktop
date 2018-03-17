@@ -1,6 +1,6 @@
 {
 	"path_install": "C:\\Business",
 	"path_copy": "C:\\Copia",
-	"upload_path": "\/usr\/share\/nginx\/html\/backup\/upload\/prueba",
+	"upload_path": "prueba",
 	"data_base_folder": "DEMO"
 }

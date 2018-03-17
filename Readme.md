@@ -7,6 +7,8 @@
 - ocra
 - net-sftp
 - rest-client
+- dropbox_api
+- bundler
 
 ## Package
 - pip
