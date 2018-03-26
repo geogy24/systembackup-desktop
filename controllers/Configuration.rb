@@ -35,11 +35,3 @@ class Configuration
     end
   end
 end
-
-=begin
-config = Configuration.new
-config.readConfig()
-puts config.pathInstall
-puts config.pathCopy
-puts config.dataBaseFolder
-=end

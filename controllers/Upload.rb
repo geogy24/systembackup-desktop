@@ -6,18 +6,31 @@ class Upload
 
     MAX_SIZE_PER_REQUEST = 140000000 # 140 MEGAS
 
-    def initialize()
+    attr_accessor :pathCopy, :pathUpload, :copyFileName
+
+    def initialize(copyDirectory, uploadDirectory)
         @dropboxClient = DropboxApi::Client.new(Config::DROPBOX_API_TOKEN)
+        @pathCopy = copyDirectory
+        @pathUpload = uploadDirectory
+        @copyFileName = DateTime.now.strftime("%Y_%m_%d")
     end 
 
-    def uploadCopy(copyDirectory, uploadDirectory)
-        #folderObject = @dropboxClient.list_folder('/almapaisa')
-        #puts folderObject.inspect()
+    def upload()
+        deleteExistingCopy()
+        uploadCopy()
+        checkIfUploaded()
+    end
+
+    private def deleteExistingCopy
+        @dropboxClient.delete("/#{@uploadDirectory}/#{@copyFileName}.rar")
+    end
+
+    private def uploadCopy
         cursor = nil
 
         # open file
-        open("#{copyDirectory}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar") do |file|
-          puts 'File uploading.'
+        open("#{@copyDirectory}\\#{@copyFileName}.rar") do |file|
+          puts 'Cargando archivo.'
 
           while record = file.read(MAX_SIZE_PER_REQUEST)
             puts '.'
@@ -32,14 +45,22 @@ class Upload
           @dropboxClient.upload_session_finish(cursor, 
               DropboxApi::Metadata::CommitInfo.new(
                   {
-                      "name" => "#{DateTime.now.strftime("%Y_%m_%d")}.rar",
-                      "path" => "/#{uploadDirectory}/#{DateTime.now.strftime("%Y_%m_%d")}.rar",
+                      "name" => "#{@copyFileName}.rar",
+                      "path" => "/#{@uploadDirectory}/#{@copyFileName}.rar",
                       "mode" => "add"
                   }
               )
           )
 
-           puts "File upload finish."
+           puts "Carga de archivo finalizada."
         end
     end
+
+    private def checkIfUploaded
+        results = @dropboxClient.search("#{@copyFileName}", "/#{@uploadDirectory}/")
+        
+        if(results.matches.empty?)
+            raise "No se cargó la copia."
+        end
+    end 
 end
