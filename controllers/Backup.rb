@@ -3,36 +3,68 @@ require 'date'
 class Backup
   EXTENSIONS = [".frx", ".frt", ".fpt", ".cdx", ".dbf", ".bak"]
 
-  attr_accessor :pathInstall, :pathCopy
+  attr_accessor :pathInstall, :pathCopy, :pathDatabaseFolder
 
-  def initialize(pathInstall, pathCopy)
+  @@dateTime = DateTime.now.strftime("%Y_%m_%d")
+
+  @@folders = nil
+
+  def initialize(pathInstall, pathCopy, pathDatabaseFolder)
     @pathInstall = pathInstall
     @pathCopy = pathCopy
+    @pathDatabaseFolder = pathDatabaseFolder
+
+    @@folders = [ { 'source_folder' => 'reportes' },
+                  { 'source_folder' => 'repodos' },
+                  { 'source_folder' => "#{@pathDatabaseFolder}\\datos", 'destiny_folder' => 'DB'}]
   end
 
-  def getFiles(directory)
+  def initializeDirectory
+    deleteCopyFile()
+    createDirectories()
+  end
+
+  private def deleteCopyFile()
+    if(File.exists?("#{@pathCopy}\\#{@@dateTime}.rar"))   # Delete .rar file if exists
+      File.delete("#{@pathCopy}\\#{@@dateTime}.rar")
+    end
+  end
+
+  private def createDirectories()
+    if(!Dir.exists?("#{@pathCopy}\\#{@@dateTime}"))
+      Dir.mkdir("#{@pathCopy}\\#{@@dateTime}") # Create a root directory
+    end
+    
+    for folder in @@folders
+      destinyFolder = "#{@pathCopy}\\#{@@dateTime}\\#{folder['source_folder']}"
+
+      if(folder.has_key?('destiny_folder'))
+        destinyFolder = "#{@pathCopy}\\#{@@dateTime}\\#{folder['destiny_folder']}"
+      end
+
+      if(!Dir.exists?(destinyFolder))
+        Dir.mkdir(destinyFolder) # Create a reports directory
+      end
+    end
+  end
+
+  def makeCopy
+    for folder in @@folders
+      files = backup.getFiles(folder['source_folder'])
+
+      if(folder.has_key?('destiny_folder'))
+        copyFilesToBackupDirectory(files, folder['source_folder']. folder['destiny_folder'])
+      else
+        copyFilesToBackupDirectory(files, folder['source_folder'])
+      end
+    end
+  end
+
+  private def getFiles(directory)
     return Dir.entries("#{@pathInstall}\\#{directory}")
   end
 
-  def createDirectories()
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}") # Create a root directory
-    end
-
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\reportes"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\reportes") # Create a reports directory
-    end
-
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\repodos"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\repodos")
-    end
-
-    if(!Dir.exists?("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\DB"))
-      Dir.mkdir("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\DB") # Create a database directory
-    end
-  end
-
-  def copyFilesToBackupDirectory(files, folder, destinyFolder = "")
+  private def copyFilesToBackupDirectory(files, folder, destinyFolder = "")
     if (destinyFolder.empty?)
       destinyFolder = folder
     end
@@ -43,7 +75,7 @@ class Backup
     files.each do |file|  # verify each element of array
       for extension in EXTENSIONS # verify if the file extension is in array
         if (file.downcase.include?(extension))
-          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}\\#{destinyFolder}")
+          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{@@dateTime}\\#{destinyFolder}")
           puts "Copiando #{file} #{actualFile}/#{quantityFiles}"
           break # found extension
         end
@@ -54,10 +86,6 @@ class Backup
   end
 
   def deleteCopyDirectory()
-    FileUtils.rm_rf("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}")
-  end
-
-  def deleteCopyFile()
-    File.delete("#{@pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.zip")
+    FileUtils.rm_rf("#{@pathCopy}\\#{@@dateTime}")
   end
 end
