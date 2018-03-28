@@ -22,14 +22,18 @@ class Upload
     end
 
     private def deleteExistingCopy
-        @dropboxClient.delete("/#{@uploadDirectory}/#{@copyFileName}.rar")
+        results = @dropboxClient.search("#{@copyFileName}", "/#{@pathUpload}/")
+        
+        if(!results.matches.empty?)
+            @dropboxClient.delete("/#{@pathUpload}/#{@copyFileName}.rar")
+        end
     end
 
     private def uploadCopy
         cursor = nil
 
         # open file
-        open("#{@copyDirectory}\\#{@copyFileName}.rar") do |file|
+        open("#{@pathCopy}\\#{@copyFileName}.rar") do |file|
           puts 'Cargando archivo.'
 
           while record = file.read(MAX_SIZE_PER_REQUEST)
@@ -46,7 +50,7 @@ class Upload
               DropboxApi::Metadata::CommitInfo.new(
                   {
                       "name" => "#{@copyFileName}.rar",
-                      "path" => "/#{@uploadDirectory}/#{@copyFileName}.rar",
+                      "path" => "/#{@pathUpload}/#{@copyFileName}.rar",
                       "mode" => "add"
                   }
               )
@@ -57,7 +61,7 @@ class Upload
     end
 
     private def checkIfUploaded
-        results = @dropboxClient.search("#{@copyFileName}", "/#{@uploadDirectory}/")
+        results = @dropboxClient.search("#{@copyFileName}", "/#{@pathUpload}/")
         
         if(results.matches.empty?)
             raise "No se cargó la copia."

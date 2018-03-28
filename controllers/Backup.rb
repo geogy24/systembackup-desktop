@@ -1,4 +1,5 @@
 require 'date'
+require 'fileutils'
 
 class Backup
   EXTENSIONS = [".frx", ".frt", ".fpt", ".cdx", ".dbf", ".bak"]
@@ -50,10 +51,11 @@ class Backup
 
   def makeCopy
     for folder in @@folders
-      files = backup.getFiles(folder['source_folder'])
-
+      
+      files = getFiles(folder['source_folder'])
+      
       if(folder.has_key?('destiny_folder'))
-        copyFilesToBackupDirectory(files, folder['source_folder']. folder['destiny_folder'])
+        copyFilesToBackupDirectory(files, folder['source_folder'], folder['destiny_folder'])
       else
         copyFilesToBackupDirectory(files, folder['source_folder'])
       end
@@ -68,15 +70,15 @@ class Backup
     if (destinyFolder.empty?)
       destinyFolder = folder
     end
-
+    
     quantityFiles = files.size
     actualFile = 0
 
     files.each do |file|  # verify each element of array
       for extension in EXTENSIONS # verify if the file extension is in array
-        if (file.downcase.include?(extension))
-          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{@@dateTime}\\#{destinyFolder}")
+        if (file.downcase.include?(extension))  
           puts "Copiando #{file} #{actualFile}/#{quantityFiles}"
+          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{@@dateTime}\\#{destinyFolder}")
           break # found extension
         end
       end

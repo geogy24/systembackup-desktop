@@ -20,8 +20,7 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
 
     backup.deleteCopyDirectory()
   rescue Exception => e
-    puts e.message
-    #puts %x(library/reminder.exe #{config.pathInstall} #{config.dataBaseFolder} "No se realizó la copia de seguridad")
+    puts %x(library/reminder.exe #{config.pathInstall} #{config.dataBaseFolder} "No se realizó la copia de seguridad #{e.message}")
   end
 else
   puts "Error: directorios configurados no existen"
