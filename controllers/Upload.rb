@@ -18,7 +18,7 @@ class Upload
     def upload()
         deleteExistingCopy()
         uploadCopy()
-        checkIfUploaded()
+        #checkIfUploaded()
     end
 
     private def deleteExistingCopy
