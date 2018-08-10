@@ -13,6 +13,7 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
     backup.initializeDirectory()
     backup.makeCopy()
 
+    puts "Comprimiendo copia"
     puts %x(rar a -r #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")})
 
     upload = Upload.new(config.pathCopy, config.uploadPath)
@@ -20,7 +21,8 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
 
     backup.deleteCopyDirectory()
   rescue Exception => e
-    puts %x(library/reminder.exe #{config.pathInstall} #{config.dataBaseFolder} "No se realizó la copia de seguridad #{e.message}")
+    puts "Error #{e.message}"
+    #puts %x(library/reminder.exe #{config.pathInstall} #{config.dataBaseFolder} "No se realizó la copia de seguridad #{e.message}")
   end
 else
   puts "Error: directorios configurados no existen"

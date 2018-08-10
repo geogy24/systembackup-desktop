@@ -51,40 +51,21 @@ class Backup
 
   def makeCopy
     for folder in @@folders
-      
-      files = getFiles(folder['source_folder'])
-      
       if(folder.has_key?('destiny_folder'))
-        copyFilesToBackupDirectory(files, folder['source_folder'], folder['destiny_folder'])
+        copyFilesToBackupDirectory(folder['source_folder'], folder['destiny_folder'])
       else
-        copyFilesToBackupDirectory(files, folder['source_folder'])
+        copyFilesToBackupDirectory(folder['source_folder'])
       end
     end
   end
 
-  private def getFiles(directory)
-    return Dir.entries("#{@pathInstall}\\#{directory}")
-  end
-
-  private def copyFilesToBackupDirectory(files, folder, destinyFolder = "")
-    if (destinyFolder.empty?)
-      destinyFolder = folder
-    end
-    
-    quantityFiles = files.size
-    actualFile = 0
-
-    files.each do |file|  # verify each element of array
-      for extension in EXTENSIONS # verify if the file extension is in array
-        if (file.downcase.include?(extension))  
-          puts "Copiando #{file} #{actualFile}/#{quantityFiles}"
-          FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{@@dateTime}\\#{destinyFolder}")
-          break # found extension
-        end
+  private def copyFilesToBackupDirectory(folder, destinyFolder = folder)
+    Dir.foreach("#{@pathInstall}\\#{folder}\\") { |file|
+      if (EXTENSIONS.include? File.extname(file).downcase)
+        puts "Copiando #{file}"
+        FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{@@dateTime}\\#{destinyFolder}")
       end
-
-      actualFile += 1
-    end
+    }
   end
 
   def deleteCopyDirectory()
