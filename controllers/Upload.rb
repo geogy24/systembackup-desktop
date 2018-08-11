@@ -4,7 +4,8 @@ require_relative '../config/Config'
 
 class Upload
 
-    MAX_SIZE_PER_REQUEST = 140000000 # 140 MEGAS
+    # Limit size per request is 150 MB or less
+    MAX_SIZE_PER_REQUEST = 4000000 # 4 MB
 
     attr_accessor :pathCopy, :pathUpload, :copyFileName
 
@@ -37,12 +38,12 @@ class Upload
           puts 'Cargando archivo.'
 
           while record = file.read(MAX_SIZE_PER_REQUEST)
-            puts '.'
+            puts "Cargando #{MAX_SIZE_PER_REQUEST} BYTES"
 
             if (cursor == nil)
               cursor = @dropboxClient.upload_session_start(record)
             else
-              cursor.upload_session_append_v2(cursor, record)
+              @dropboxClient.upload_session_append_v2(cursor, record)
             end
           end
 
