@@ -34,31 +34,32 @@ class Upload
         cursor = nil
 
         # open file
-        open("#{@pathCopy}\\#{@copyFileName}.rar") do |file|
-          puts 'Cargando archivo.'
+        i_stream = File.open("#{@pathCopy}\\#{@copyFileName}.rar")
+        puts "Cargando #{MAX_SIZE_PER_REQUEST} BYTES"
+        
+        chunk = i_stream.read MAX_SIZE_PER_REQUEST
+        cursor = @dropboxClient.upload_session_start chunk
 
-          while record = file.read(MAX_SIZE_PER_REQUEST)
+        loop do
             puts "Cargando #{MAX_SIZE_PER_REQUEST} BYTES"
-
-            if (cursor == nil)
-              cursor = @dropboxClient.upload_session_start(record)
-            else
-              @dropboxClient.upload_session_append_v2(cursor, record)
-            end
-          end
-
-          @dropboxClient.upload_session_finish(cursor, 
-              DropboxApi::Metadata::CommitInfo.new(
-                  {
-                      "name" => "#{@copyFileName}.rar",
-                      "path" => "/#{@pathUpload}/#{@copyFileName}.rar",
-                      "mode" => "add"
-                  }
-              )
-          )
-
-           puts "Carga de archivo finalizada."
+            chunk = i_stream.read MAX_SIZE_PER_REQUEST
+            break if chunk.nil?
+    
+            @dropboxClient.upload_session_append_v2 cursor, chunk
+            break if chunk.size < MAX_SIZE_PER_REQUEST
         end
+
+        @dropboxClient.upload_session_finish cursor, DropboxApi::Metadata::CommitInfo.new(
+            {
+                "name" => "#{@copyFileName}.rar",
+                "path" => "/#{@pathUpload}/#{@copyFileName}.rar",
+                "mode" => "add"
+            }
+        )
+        
+        i_stream.close
+
+        puts "Carga de archivo finalizada."
     end
 
     private def checkIfUploaded

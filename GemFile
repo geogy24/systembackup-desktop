@@ -1,6 +1,4 @@
 source 'https://rubygems.org'
 gem 'ocra'
-gem 'dropbox_api'
-gem 'net-sftp'
-gem 'rest-client'
+gem 'dropbox_api', '~> 0.1.12'
 gem 'certified'
