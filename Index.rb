@@ -12,13 +12,15 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
     backup = Backup.new(config.pathInstall, config.pathCopy, config.dataBaseFolder)
     backup.initializeDirectory()
     backup.makeCopy()
-    
+
     puts "Comprimiendo copia"
-    puts %x(rar a -r #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")})
-    
+    puts %x(rar a -r -m5 #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")})
+
     puts "Cargando.."
-    upload = Upload.new(config.pathCopy, config.uploadPath)
-    upload.upload()
+    puts %x(library/rclone.exe -vv --config="config/rclone.conf" copy --dropbox-chunk-size=145000k --retries=5 #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar remote:#{config.uploadPath})
+
+    #upload = Upload.new(config.pathCopy, config.uploadPath)
+    #upload.upload()
 
     backup.deleteCopyDirectory()
   rescue Exception => e
