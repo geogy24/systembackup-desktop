@@ -2,7 +2,6 @@ require 'date'
 
 require_relative 'controllers/Configuration'
 require_relative 'controllers/Backup'
-require_relative 'controllers/Upload'
 
 config = Configuration.new
 config.readConfig()
@@ -18,9 +17,6 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
 
     puts "Cargando.."
     puts %x(library/rclone.exe -vv --config="config/rclone.conf" copy --dropbox-chunk-size=145000k --retries=5 #{config.pathCopy}\\#{DateTime.now.strftime("%Y_%m_%d")}.rar remote:#{config.uploadPath})
-
-    #upload = Upload.new(config.pathCopy, config.uploadPath)
-    #upload.upload()
 
     backup.deleteCopyDirectory()
   rescue Exception => e

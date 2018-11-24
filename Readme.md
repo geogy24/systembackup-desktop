@@ -5,9 +5,6 @@
 
 ## Gemas
 - ocra
-- net-sftp
-- rest-client
-- dropbox_api
 - bundler
 
 ## Package
@@ -26,3 +23,5 @@ pyinstaller -F --windowed config.py
 
 ## Instalación
 Debe agregarse en una variable de entorno de WINDOWS el PATH donde se encuentre el archivo rar.exe quien es el encargado de comprimir los archivos.
+
+Debe descargarse rclone de https://rclone.org/downloads/ como medio de carga de la copia de seguridad.
