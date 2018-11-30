@@ -1,21 +1,26 @@
 require 'date'
 require 'fileutils'
+require_relative '../base/shared'
 
 class Backup
+  include Shared
+
   EXTENSIONS = [".frx", ".frt", ".fpt", ".cdx", ".dbf", ".bak"]
 
   attr_accessor :path_install, :path_copy, :path_database_folder
 
   @@date_time = DateTime.now.strftime("%Y_%m_%d")
 
-  def initialize(path_install, path_copy, path_database_folder)
-    @path_install = path_install
-    @path_copy = path_copy
-    @path_database_folder = path_database_folder
+  def initialize()
+    puts Shared::APP_CONFIG[:production][:extensions]
 
-    @@folders = [ { 'source_folder' => 'reportes' },
-                  { 'source_folder' => 'repodos' },
-                  { 'source_folder' => "#{@path_database_folder}\\datos", 'destiny_folder' => 'DB'}]
+    #@path_install = path_install
+    #@path_copy = path_copy
+    #@path_database_folder = path_database_folder
+
+    #@@folders = [ { 'source_folder' => 'reportes' },
+    #              { 'source_folder' => 'repodos' },
+    #              { 'source_folder' => "#{@path_database_folder}\\datos", 'destiny_folder' => 'DB'}]
   end
 
   def initializeDirectory

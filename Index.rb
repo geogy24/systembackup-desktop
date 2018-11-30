@@ -1,9 +1,9 @@
 require 'date'
-require_relative 'controllers/Backup'
+require_relative 'core/backup'
 
-config = Configuration.new
-config.readConfig()
+Backup.new
 
+=begin
 if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
   begin
     backup = Backup.new(config.pathInstall, config.pathCopy, config.dataBaseFolder)
@@ -24,3 +24,4 @@ if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
 else
   puts "Error: directorios configurados no existen"
 end
+=end

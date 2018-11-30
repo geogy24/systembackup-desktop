@@ -3,3 +3,10 @@ production:
   path_copy: D:\Copia,
   path_upload: empresas/prueba,
   data_base_folder: DEMO
+  extensions:
+    - .frx
+    - .frt
+    - .fpt
+    - .cdx
+    - .dbf
+    - .bak
