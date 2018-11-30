@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    config-file-loader (0.1.2)
     ocra (1.3.10)
     rbase-ff (0.9.3)
 
@@ -8,6 +9,7 @@ PLATFORMS
   x86-mingw32
 
 DEPENDENCIES
+  config-file-loader (~> 0.1.2)
   ocra
   rbase-ff (~> 0.9.3)
 

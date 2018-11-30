@@ -4,20 +4,18 @@ require 'fileutils'
 class Backup
   EXTENSIONS = [".frx", ".frt", ".fpt", ".cdx", ".dbf", ".bak"]
 
-  attr_accessor :pathInstall, :pathCopy, :pathDatabaseFolder
+  attr_accessor :path_install, :path_copy, :path_database_folder
 
-  @@dateTime = DateTime.now.strftime("%Y_%m_%d")
+  @@date_time = DateTime.now.strftime("%Y_%m_%d")
 
-  @@folders = nil
-
-  def initialize(pathInstall, pathCopy, pathDatabaseFolder)
-    @pathInstall = pathInstall
-    @pathCopy = pathCopy
-    @pathDatabaseFolder = pathDatabaseFolder
+  def initialize(path_install, path_copy, path_database_folder)
+    @path_install = path_install
+    @path_copy = path_copy
+    @path_database_folder = path_database_folder
 
     @@folders = [ { 'source_folder' => 'reportes' },
                   { 'source_folder' => 'repodos' },
-                  { 'source_folder' => "#{@pathDatabaseFolder}\\datos", 'destiny_folder' => 'DB'}]
+                  { 'source_folder' => "#{@path_database_folder}\\datos", 'destiny_folder' => 'DB'}]
   end
 
   def initializeDirectory
@@ -26,21 +24,21 @@ class Backup
   end
 
   private def deleteCopyFile()
-    if(File.exists?("#{@pathCopy}\\#{@@dateTime}.rar"))   # Delete .rar file if exists
-      File.delete("#{@pathCopy}\\#{@@dateTime}.rar")
+    if(File.exists?("#{@path_copy}\\#{@@date_time}.rar"))   # Delete .rar file if exists
+      File.delete("#{@path_copy}\\#{@@date_time}.rar")
     end
   end
 
   private def createDirectories()
-    if(!Dir.exists?("#{@pathCopy}\\#{@@dateTime}"))
-      Dir.mkdir("#{@pathCopy}\\#{@@dateTime}") # Create a root directory
+    if(!Dir.exists?("#{@path_copy}\\#{@@date_time}"))
+      Dir.mkdir("#{@path_copy}\\#{@@date_time}") # Create a root directory
     end
     
     for folder in @@folders
-      destinyFolder = "#{@pathCopy}\\#{@@dateTime}\\#{folder['source_folder']}"
+      destinyFolder = "#{@path_copy}\\#{@@date_time}\\#{folder['source_folder']}"
 
       if(folder.has_key?('destiny_folder'))
-        destinyFolder = "#{@pathCopy}\\#{@@dateTime}\\#{folder['destiny_folder']}"
+        destinyFolder = "#{@path_copy}\\#{@@date_time}\\#{folder['destiny_folder']}"
       end
 
       if(!Dir.exists?(destinyFolder))
@@ -60,15 +58,15 @@ class Backup
   end
 
   private def copyFilesToBackupDirectory(folder, destinyFolder = folder)
-    Dir.foreach("#{@pathInstall}\\#{folder}\\") { |file|
+    Dir.foreach("#{@path_install}\\#{folder}\\") { |file|
       if (EXTENSIONS.include? File.extname(file).downcase)
         puts "Copiando #{file}"
-        FileUtils.cp("#{@pathInstall}\\#{folder}\\#{file}", "#{@pathCopy}\\#{@@dateTime}\\#{destinyFolder}")
+        FileUtils.cp("#{@path_install}\\#{folder}\\#{file}", "#{@path_copy}\\#{@@date_time}\\#{destinyFolder}")
       end
     }
   end
 
   def deleteCopyDirectory()
-    FileUtils.rm_rf("#{@pathCopy}\\#{@@dateTime}")
+    FileUtils.rm_rf("#{@path_copy}\\#{@@date_time}")
   end
 end

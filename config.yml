@@ -1,0 +1,5 @@
+production:
+  path_install: D:\Business
+  path_copy: D:\Copia,
+  path_upload: empresas/prueba,
+  data_base_folder: DEMO
