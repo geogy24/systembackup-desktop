@@ -1,27 +1,30 @@
-# Requerimientos
+# Requeriments
 - ruby 2.3.3
-- python 3.6.2
-- RAR versión gratuita o superior
+- RAR on free version or superior
 
-## Gemas
-- ocra
-- bundler
+# On development
+Install gem bundler and execute
 
-## Package
-- pip
-- dbf
-- pyinstaller 3.3 [pip install --upgrade pyinstaller]
+```
+bundler
+```
 
-# Compilación Ruby
+## Compile
+Execute this command to generate an executable with its gems include
+
+```
 ocra Index.rb --verbose --add-all-core
+```
 
-# Compilación python
-Como usuario administrador
+# On production
+- You must to add a record in WINDOS PATH enviroment variable. This record must to have the direction to rar.exe
+- Download [https://rclone.org/downloads/|rclone] and copy to library folder at instalation folder.
 
-pyinstaller -F reminder.py
-pyinstaller -F --windowed config.py
+# License
 
-## Instalación
-Debe agregarse en una variable de entorno de WINDOWS el PATH donde se encuentre el archivo rar.exe quien es el encargado de comprimir los archivos.
+Private. All rights reserved.
 
-Debe descargarse rclone de https://rclone.org/downloads/ como medio de carga de la copia de seguridad.
+# Developed by
+
+Jorge Eduardo Díaz Leytón
+Twitter: @geogy24
