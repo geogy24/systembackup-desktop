@@ -1,8 +1,12 @@
 production:
   path_install: D:\Business
-  path_copy: D:\Copia,
-  path_upload: empresas/prueba,
-  data_base_folder: DEMO
+  path_copy: D:\Copia
+  path_upload: empresas/prueba
+  folders:
+    - source_folder: reportes
+    - source_folder: repodos
+    - source_folder: DEMO\datos
+      destiny_folder: DB
   extensions:
     - .frx
     - .frt

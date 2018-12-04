@@ -1,77 +1,60 @@
 require 'date'
 require 'fileutils'
-require_relative '../base/shared'
 
 class Backup
-  include Shared
-
-  EXTENSIONS = [".frx", ".frt", ".fpt", ".cdx", ".dbf", ".bak"]
-
-  attr_accessor :path_install, :path_copy, :path_database_folder
-
-  @@date_time = DateTime.now.strftime("%Y_%m_%d")
-
-  def initialize()
-    puts Shared::APP_CONFIG[:production][:extensions]
-
-    #@path_install = path_install
-    #@path_copy = path_copy
-    #@path_database_folder = path_database_folder
-
-    #@@folders = [ { 'source_folder' => 'reportes' },
-    #              { 'source_folder' => 'repodos' },
-    #              { 'source_folder' => "#{@path_database_folder}\\datos", 'destiny_folder' => 'DB'}]
+  def start_environment
+    delete_copy_file()
+    create_directories()
   end
 
-  def initializeDirectory
-    deleteCopyFile()
-    createDirectories()
-  end
-
-  private def deleteCopyFile()
-    if(File.exists?("#{@path_copy}\\#{@@date_time}.rar"))   # Delete .rar file if exists
-      File.delete("#{@path_copy}\\#{@@date_time}.rar")
+  private def delete_copy_file
+    if(File.exists?("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}#{$compress_type}"))   # Delete compress file if exists
+      Shared::LOGGER.info("delete file with same date: #{$date_time}#{$compress_type}")
+      File.delete("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}#{$compress_type}")
     end
   end
 
-  private def createDirectories()
-    if(!Dir.exists?("#{@path_copy}\\#{@@date_time}"))
-      Dir.mkdir("#{@path_copy}\\#{@@date_time}") # Create a root directory
+  private def create_directories
+    if(!Dir.exists?("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}"))
+      Shared::LOGGER.info("create root directory: #{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}")
+      Dir.mkdir("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}")
     end
     
-    for folder in @@folders
-      destinyFolder = "#{@path_copy}\\#{@@date_time}\\#{folder['source_folder']}"
+    for folder in Shared::APP_CONFIG[:production][:folders]
+      destiny_folder = "#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}\\#{folder['source_folder']}"
 
       if(folder.has_key?('destiny_folder'))
-        destinyFolder = "#{@path_copy}\\#{@@date_time}\\#{folder['destiny_folder']}"
+        destiny_folder = "#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}\\#{folder['destiny_folder']}"
       end
 
-      if(!Dir.exists?(destinyFolder))
-        Dir.mkdir(destinyFolder) # Create a reports directory
+      if(!Dir.exists?(destiny_folder))
+        Shared::LOGGER.info("create additional directories: #{destiny_folder}")
+        Dir.mkdir(destiny_folder) # Create a reports directory
       end
     end
   end
 
-  def makeCopy
-    for folder in @@folders
+  def make_copy
+    for folder in Shared::APP_CONFIG[:production][:folders]
+      Shared::LOGGER.info("copy folder: #{folder['source_folder']}")
       if(folder.has_key?('destiny_folder'))
-        copyFilesToBackupDirectory(folder['source_folder'], folder['destiny_folder'])
+        copy_files_to_backup_directory(folder['source_folder'], folder['destiny_folder'])
       else
-        copyFilesToBackupDirectory(folder['source_folder'])
+        copy_files_to_backup_directory(folder['source_folder'])
       end
     end
   end
 
-  private def copyFilesToBackupDirectory(folder, destinyFolder = folder)
-    Dir.foreach("#{@path_install}\\#{folder}\\") { |file|
-      if (EXTENSIONS.include? File.extname(file).downcase)
-        puts "Copiando #{file}"
-        FileUtils.cp("#{@path_install}\\#{folder}\\#{file}", "#{@path_copy}\\#{@@date_time}\\#{destinyFolder}")
+  private def copy_files_to_backup_directory(folder, destiny_folder = folder)
+    Dir.foreach("#{Shared::APP_CONFIG[:production][:path_install]}\\#{folder}\\") { |file|
+      if (Shared::APP_CONFIG[:production][:extensions].include? File.extname(file).downcase)
+        Shared::LOGGER.info("copying: #{file}")
+        FileUtils.cp("#{Shared::APP_CONFIG[:production][:path_install]}\\#{folder}\\#{file}", "#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}\\#{destiny_folder}")
       end
     }
   end
 
-  def deleteCopyDirectory()
-    FileUtils.rm_rf("#{@path_copy}\\#{@@date_time}")
+  def delete_copy_directory()
+    FileUtils.rm_rf("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{$date_time}")
   end
 end

@@ -1,7 +1,21 @@
 require 'date'
+
+require_relative 'base/globals'
+require_relative 'base/shared'
+
 require_relative 'core/backup'
 
-Backup.new
+require_relative 'validators/configuration'
+
+begin
+  Configuration::validate_directories
+
+  backup = Backup.new
+  backup.start_environment
+  backup.make_copy
+rescue StandardError => e
+  Shared::LOGGER.error(e.message)
+end
 
 =begin
 if(Dir.exists?(config.pathInstall) and Dir.exists?(config.pathCopy))
