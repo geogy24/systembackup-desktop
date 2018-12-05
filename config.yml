@@ -1,7 +1,7 @@
 production:
   path_install: D:\Business
   path_copy: D:\Copia
-  path_upload: empresas/prueba
+  upload_path: empresas/prueba
   folders:
     - source_folder: reportes
     - source_folder: repodos
