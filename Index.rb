@@ -9,10 +9,10 @@ require_relative 'core/upload'
 
 require_relative 'validators/configuration'
 
-$logs = Shared::Logs.new
+LOGS = Shared::Logs.new
 
 begin
-  Configuration::validate_directories
+  Configuration.validate_directories
 
   backup = Backup.new
   backup.start_environment
@@ -23,7 +23,7 @@ begin
 
   backup.delete_copy_directory
 rescue StandardError => e
-  $logs.error(e.message)
+  LOGS.error(e.message)
 ensure
-  $logs.close
+  LOGS.close
 end

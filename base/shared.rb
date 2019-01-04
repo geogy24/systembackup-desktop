@@ -4,6 +4,9 @@ require 'logger'
 module Shared
   APP_CONFIG = ConfigFileLoader.load('./config.yml')
 
+  # logs
+  # @date 03/01/2019
+  # @author github @geogy24
   class Logs
     def initialize
       @logger_file = Logger.new('logs/backup.log', 'daily')
