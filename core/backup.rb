@@ -6,8 +6,8 @@ require 'fileutils'
 # @author github @geogy24
 class Backup
   def start_environment
-    delete_copy_file()
-    create_directories()
+    delete_copy_file
+    create_directories
   end
 
   def make_copy
@@ -36,7 +36,7 @@ class Backup
   end
 
   def create_directories
-    unless Dir.exists?("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{DATE_TIME}")
+    unless Dir.exist?("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{DATE_TIME}")
       LOGS.info("create root directory: #{Shared::APP_CONFIG[:production][:path_copy]}\\#{DATE_TIME}")
       Dir.mkdir("#{Shared::APP_CONFIG[:production][:path_copy]}\\#{DATE_TIME}")
     end
