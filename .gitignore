@@ -15,4 +15,7 @@
 
 vendor/
 *.log
+
+config.yml
+rclone.conf
 # End of https://www.gitignore.io/api/executable
