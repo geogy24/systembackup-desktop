@@ -7,7 +7,7 @@ require_relative 'base/globals'
 
 require_relative 'core/backup'
 require_relative 'core/compress'
-require_relative 'core/upload'
+require_relative 'core/rclone'
 require_relative 'core/dbf'
 
 require_relative 'validators/configuration'
@@ -22,7 +22,9 @@ begin
   backup.make_copy
 
   Compress.execute
-  Upload.execute
+
+  Rclone.upload
+  Rclone.check_upload_file
 
   backup.delete_copy_directory
 rescue StandardError => e
