@@ -24,12 +24,9 @@ begin
   Compress.execute
 
   Rclone.upload
-  Rclone.check_upload_file
 
   backup.delete_copy_directory
 rescue StandardError => e
   Dbf.write_record
   LOGS.error(e.message)
-ensure
-  LOGS.close
 end
