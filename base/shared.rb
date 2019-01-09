@@ -24,10 +24,5 @@ module Shared
       @logger_file.error(message)
       @logger_console.error(message)
     end
-
-    def close
-      @logger_file.close
-      @logger_console.close
-    end
   end
 end

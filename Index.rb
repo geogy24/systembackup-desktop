@@ -29,6 +29,4 @@ begin
 rescue StandardError => e
   Dbf.write_record
   LOGS.error(e.message)
-ensure
-  LOGS.close
 end
