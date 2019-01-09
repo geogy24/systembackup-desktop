@@ -24,7 +24,6 @@ begin
   Compress.execute
 
   Rclone.upload
-  Rclone.check_upload_file
 
   backup.delete_copy_directory
 rescue StandardError => e
