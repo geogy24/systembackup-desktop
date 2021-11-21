@@ -31,4 +31,4 @@ Private. All rights reserved.
 # Developed by
 
 Jorge Eduardo Díaz Leytón
-Twitter: @geogy24
+Twitter: @jorgediaz
