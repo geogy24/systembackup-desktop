@@ -31,3 +31,4 @@ Private. All rights reserved.
 # Developed by
 
 Jorge Eduardo Díaz Leytón
+Twitter: @jorgediaz
